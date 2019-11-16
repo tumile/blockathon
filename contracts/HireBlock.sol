@@ -37,7 +37,7 @@ contract HireBlock {
         require(msg.sender == owner, "Sender must be owner of contract");
 
         Company memory newCompany = Company(companyList.length, companyName, companyImage);
-        companyList[companyList.length] = newCompany;
+        companyList.push(newCompany);
 
         return companyList.length - 1;
     }

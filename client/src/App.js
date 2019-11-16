@@ -28,11 +28,13 @@ class App extends Component {
   runExample = async () => {
     const { account, contract } = this.state;
 
-    const response = await contract.addCompany(
-      'Google',
-      'https://banner2.cleanpng.com/20180324/iww/kisspng-google-logo-g-suite-google-5ab6f1cee66464.5739288415219388949437.jpg',
-      { from: account }
-    );
+    // const response = await contract.addCompany(
+    //   'Google',
+    //   'https://banner2.cleanpng.com/20180324/iww/kisspng-google-logo-g-suite-google-5ab6f1cee66464.5739288415219388949437.jpg',
+    //   { from: account }
+    // );
+
+    const response = await contract.getEmployeeList(0);
 
     console.log(response);
   };
