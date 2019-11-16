@@ -36,20 +36,22 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Menu mode="horizontal">
-            <Menu.Item key="search">
-              <Link to="/">
-                <Icon type="file-search" />
-                Lookup
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="manage">
-              <Link to="/manage">
-                <Icon type="appstore" />
-                Manage
-              </Link>
-            </Menu.Item>
-          </Menu>
+          <div className="nav-container">
+            <Menu mode="horizontal">
+              <Menu.Item key="search">
+                <Link to="/">
+                  <Icon type="file-search" />
+                  Lookup
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="manage">
+                <Link to="/manage">
+                  <Icon type="appstore" />
+                  Manage
+                </Link>
+              </Menu.Item>
+            </Menu>
+          </div>
           <Switch>
             <Route exact path="/">
               <LookupPage contract={this.state.contract} />
