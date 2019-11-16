@@ -6,8 +6,18 @@ module.exports = {
     development: {
       host: 'localhost',
       port: 8545,
-      network_id: '*',
-      gas: 6721975
+      network_id: '*'
+    }
+  },
+  compilers: {
+    solc: {
+      version: '^0.5.0',
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200
+        }
+      }
     }
   }
 };
