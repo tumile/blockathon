@@ -1,43 +1,28 @@
+import { Icon, Menu, Spin } from 'antd';
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import TruffleContract from 'truffle-contract';
 import './App.css';
 import HireBlockContract from './contracts/HireBlock.json';
 import getWeb3 from './getWeb3';
-import { Menu, Icon, Spin } from 'antd';
+import LookupPage from './LookupPage';
+import ManagePage from './ManagePage';
 
 class App extends Component {
-  state = { storageValue: 0, account: null, contract: null };
+  state = { account: null, contract: null };
 
   componentDidMount = async () => {
     try {
       const web3 = await getWeb3();
-
       const instance = TruffleContract(HireBlockContract);
       instance.setProvider(web3.currentProvider);
-
       const contract = await instance.deployed();
-
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
-
       this.setState({ account, contract });
     } catch (err) {
       console.error(err);
     }
-  };
-
-  runExample = async () => {
-    const { account, contract } = this.state;
-
-    // const response = await contract.addCompany(
-    //   'Google',
-    //   'https://banner2.cleanpng.com/20180324/iww/kisspng-google-logo-g-suite-google-5ab6f1cee66464.5739288415219388949437.jpg',
-    //   { from: account }
-    // );
-
-    const response = await contract.getEmployeeList(0);
-
-    console.log(response);
   };
 
   render() {
@@ -48,20 +33,33 @@ class App extends Component {
         </div>
       );
     }
-
     return (
-      <div>
-        <Menu mode="horizontal" style={{ textAlign: 'right' }}>
-          <Menu.Item key="search">
-            <Icon type="file-search" />
-            Lookup
-          </Menu.Item>
-          <Menu.Item key="manage">
-            <Icon type="appstore" />
-            Manage
-          </Menu.Item>
-        </Menu>
-      </div>
+      <Router>
+        <div>
+          <Menu mode="horizontal">
+            <Menu.Item key="search">
+              <Link to="/">
+                <Icon type="file-search" />
+                Lookup
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="manage">
+              <Link to="/manage">
+                <Icon type="appstore" />
+                Manage
+              </Link>
+            </Menu.Item>
+          </Menu>
+          <Switch>
+            <Route exact path="/">
+              <LookupPage contract={this.state.contract} />
+            </Route>
+            <Route path="/manage">
+              <ManagePage contract={this.state.contract} />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
