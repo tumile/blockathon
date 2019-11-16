@@ -24,6 +24,8 @@ contract HireBlock {
 
     mapping(uint => Employee[]) private employeeLists;
 
+    mapping(uint => Employee[]) private companyCandidates;
+
     //concatenate companyId and employeeID to get the key for performance reviews
     mapping(string => PerformanceReview[]) private employeeReviewsForCompany;
 
@@ -63,6 +65,12 @@ contract HireBlock {
         string memory compEmpID = strConcat(uintToString(companyID), "-", uintToString(employeeID));
 
         employeeReviewsForCompany[compEmpID].push(newReview);
+    }
+
+    function addCandidate(uint companyID, uint employeeID, string memory employeeName, string memory employeeImage) public {
+        Employee memory newEmployee = Employee(employeeID, employeeName, employeeImage);
+        
+        companyCandidates[companyID].push(newEmployee);
     }
 
     function getEmployeeList(uint companyID) public view returns(Employee[] memory employeeList) {

@@ -1,6 +1,7 @@
 import React from 'react';
 
-const LookupPage = () => {
+const LookupPage = (props) => {
+
   return <div>Lookup Page</div>;
 };
 
