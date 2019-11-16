@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
-contract CompanyDatabase {
+contract HireBlock {
 
     struct Company {
         uint companyID;
@@ -16,18 +16,18 @@ contract CompanyDatabase {
     }
 
     struct PerformanceReview {
-        uint date;
+        uint timestamp;
         string review;
     }
 
-    Company[] companyList;
+    Company[] private companyList;
 
-    mapping(uint => Employee[]) employeeLists;
+    mapping(uint => Employee[]) private employeeLists;
 
     //concatenate companyId and employeeID to get the key for performance reviews
-    mapping(string => PerformanceReview[]) employeeReviewsForCompany;
+    mapping(string => PerformanceReview[]) private employeeReviewsForCompany;
 
-    address owner;
+    address private owner;
 
     constructor() public {
         owner = msg.sender;
@@ -42,45 +42,33 @@ contract CompanyDatabase {
         return companyList.length - 1;
     }
 
-    function addEmployee(uint companyID, string memory empName, string memory imageURL) public returns (uint empID) {
+    function addEmployee(uint companyID, string memory employeeName, string memory employeeImage) public returns (uint employeeID) {
         require(companyID < companyList.length, "Company ID is invalid");
 
         uint employeeAmount = employeeLists[companyID].length;
 
-        Employee memory newEmployee = Employee(employeeAmount, empName, imageURL);
+        Employee memory newEmployee = Employee(employeeAmount, employeeName, employeeImage);
 
         employeeLists[companyID].push(newEmployee);
 
-        return employeeAmount + 1;
+        return employeeAmount;
     }
-    
-    function addPerformanceReview(uint companyID, uint employeeID, string memory review, uint timestamp) public returns (string memory) {
+
+    function addPerformanceReview(uint companyID, uint employeeID, string memory review, uint timestamp) public {
         require(companyID < companyList.length, "Company ID is invalid");
         require(employeeID < employeeLists[companyID].length, "Employee ID is invalid");
-        
-        PerformanceReview memory newReview = PerformanceReview(review, timestamp);
-        
-        string memory compEmpID = strConcat(uintToString(companyID), uintToString(employeeID));
-        
+
+        PerformanceReview memory newReview = PerformanceReview(timestamp, review);
+
+        string memory compEmpID = strConcat(uintToString(companyID), "-", uintToString(employeeID));
+
         employeeReviewsForCompany[compEmpID].push(newReview);
-        
-        return compEmpID;
     }
-    
-    // function getEmployeeList(uint companyID) public view returns(string memory empList) {
-    //     string memory retStr = strConcat(uintToString(employeeLists[companyID][0].id), ",", employeeLists[companyID][0].name, ".");
-        
-    //     for (uint i = 1; i < employeeLists[companyID].length; i++) {
-    //         retStr = strConcat(retStr, uintToString(employeeLists[companyID][i].id), ",", employeeLists[companyID][i].name, ".");
-    //     }
-        
-    //     return retStr;
-    // }
-    
-    function getEmployeeList(uint companyID) public view returns(Employee[] memory empList) {
+
+    function getEmployeeList(uint companyID) public view returns(Employee[] memory employeeList) {
         return employeeLists[companyID];
     }
-    
+
     // function getPerformanceReviews(uint companyID, uint employeeID) public view returns (string memory reviewList) {
     //     string memory compEmpID = strConcat(uintToString(companyID), uintToString(employeeID));
     //     PerformanceReview[] memory reviews = employeeReviewsForCompany[compEmpID];
@@ -95,20 +83,20 @@ contract CompanyDatabase {
         
     //     return retStr;
     // }
-    
+
      function getPerformanceReviews(uint companyID, uint employeeID) public view returns (PerformanceReview[] memory reviewList) {
-        string memory compEmpID = strConcat(uintToString(companyID), uintToString(employeeID));
+        string memory compEmpID = strConcat(uintToString(companyID), "-", uintToString(employeeID));
         return employeeReviewsForCompany[compEmpID];
     }
-    
+
     function getCompanyCount() public view returns(uint count) {
         return companyList.length;
     }
-    
+
     function getCompany(uint companyID) public view returns(Company memory comp) {
         return companyList[companyID];
     }
-    
+
     function strConcat(string memory _a, string memory _b, string memory _c, string memory _d, string memory _e)
     internal pure returns (string memory){
         bytes memory _ba = bytes(_a);
@@ -126,26 +114,27 @@ contract CompanyDatabase {
         for (uint i = 0; i < _be.length; i++) babcde[k++] = _be[i];
         return string(babcde);
     }
-    
-    function strConcat(string memory _a, string memory _b, string memory _c, string memory _d) pure internal returns (string memory) {
+
+    function strConcat(string memory _a, string memory _b, string memory _c, string memory _d) internal pure returns (string memory) {
         return strConcat(_a, _b, _c, _d, "");
     }
-    
-    function strConcat(string memory _a, string memory _b, string memory _c) pure internal returns (string memory) {
+
+    function strConcat(string memory _a, string memory _b, string memory _c) internal pure returns (string memory) {
         return strConcat(_a, _b, _c, "", "");
     }
-    
-    function strConcat(string memory _a, string memory _b) pure internal returns (string memory) {
+
+    function strConcat(string memory _a, string memory _b) internal pure returns (string memory) {
         return strConcat(_a, _b, "", "", "");
     }
 
-    function uintToString(uint v) pure internal returns (string memory str) {
+    function uintToString(uint v) internal pure returns (string memory str) {
         uint maxlength = 100;
         bytes memory reversed = new bytes(maxlength);
         uint i = 0;
-        while (v != 0) {
-            uint remainder = v % 10;
-            v = v / 10;
+        uint temp = v;
+        while (temp != 0) {
+            uint remainder = temp % 10;
+            temp = temp / 10;
             reversed[i++] = byte(uint8(48 + remainder));
         }
         bytes memory s = new bytes(i + 1);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TruffleContract from 'truffle-contract';
 import './App.css';
-import SimpleStorageContract from './contracts/SimpleStorage.json';
+import HireBlockContract from './contracts/HireBlock.json';
 import getWeb3 from './getWeb3';
 
 class App extends Component {
@@ -11,8 +11,9 @@ class App extends Component {
     try {
       const web3 = await getWeb3();
 
-      const instance = TruffleContract(SimpleStorageContract);
+      const instance = TruffleContract(HireBlockContract);
       instance.setProvider(web3.currentProvider);
+
       const contract = await instance.deployed();
 
       const accounts = await web3.eth.getAccounts();
@@ -26,13 +27,13 @@ class App extends Component {
 
   runExample = async () => {
     const { account, contract } = this.state;
+    console.log(contract);
 
-    await contract
-      .set(5, { from: account })
-      .then(() => contract.get())
-      .then(response => {
-        this.setState({ storageValue: response.words[0] });
-      });
+    // await contract.addCompany(
+    //   'Google',
+    //   'https://banner2.cleanpng.com/20180324/iww/kisspng-google-logo-g-suite-google-5ab6f1cee66464.5739288415219388949437.jpg',
+    //   { from: account }
+    // );
   };
 
   render() {
