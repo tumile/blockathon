@@ -11,9 +11,10 @@ module.exports = function(deployer) {
     instance.addEmployee(1, "Bob Jones", "https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png");
     instance.addEmployee(1, "James Lincoln", "https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png");
 
-    Date d1 = new Date(2017, 12, 28);
+    instance.addPerformanceReview(0, 0, "Good job this year", Date.UTC(2017, 12, 28));
+    instance.addPerformanceReview(0, 0, "Another good year", Date.UTC(2018, 12, 28));
 
-    instance.addPerformanceReview(0, 0, "Good job this year", d1.prototype.getTime());
+    instance.addPerformanceReview(0, 1, "Good job this year", Date.UTC(2017, 12, 26));
 
   });
 };

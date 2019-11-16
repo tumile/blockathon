@@ -21,7 +21,7 @@ class App extends Component {
       const account = accounts[0];
       this.setState({ account, contract });
 
-      console.log(contract.getCompany(0));
+      console.log(contract.getPerformanceReviews(0, 0));
 
     } catch (err) {
       console.error(err);
