@@ -69,21 +69,6 @@ contract HireBlock {
         return employeeLists[companyID];
     }
 
-    // function getPerformanceReviews(uint companyID, uint employeeID) public view returns (string memory reviewList) {
-    //     string memory compEmpID = strConcat(uintToString(companyID), uintToString(employeeID));
-    //     PerformanceReview[] memory reviews = employeeReviewsForCompany[compEmpID];
-        
-    //     string memory retStr = strConcat(reviews[0].review, ",", uintToString(reviews[0].date), ".");
-        
-        
-    //     for (uint i = 1; i < reviews.length; i++) {
-    //         retStr = strConcat(retStr, reviews[i].review, ",", uintToString(reviews[0].date), ".");
-    //     }
-        
-        
-    //     return retStr;
-    // }
-
      function getPerformanceReviews(uint companyID, uint employeeID) public view returns (PerformanceReview[] memory reviewList) {
         string memory compEmpID = strConcat(uintToString(companyID), "-", uintToString(employeeID));
         return employeeReviewsForCompany[compEmpID];
