@@ -1,8 +1,12 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .screen-center {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loadmore-list {
+    min-height: 350px;
 }
