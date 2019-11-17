@@ -55,7 +55,9 @@ const ManagePage = () => {
                             <Link to={`/employees/${item.employeeID}`}>
                                 View Profile
                             </Link>,
-                            <a key="list-loadmore-more">Add Review</a>
+                            <Link to={`/addreview/${item.employeeID}`}>
+                                Add Review
+                            </Link>
                         ]}
                     >
                         <Skeleton avatar title={false} loading={false} active>
