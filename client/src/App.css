@@ -10,3 +10,15 @@
 .loadmore-list {
     min-height: 350px;
 }
+
+.nav-container {
+  max-width: 1000px;
+  margin: auto;
+  text-align: right;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 16px;
+}
