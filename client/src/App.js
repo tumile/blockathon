@@ -2,11 +2,12 @@ import { Icon, Menu, Spin } from 'antd';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import TruffleContract from 'truffle-contract';
+import AddReviewPage from './AddReviewPage';
 import './App.css';
+import CandidatePage from './CandidatePage';
 import HireBlockContract from './contracts/HireBlock.json';
 import EmployeePage from './EmployeePage';
 import getWeb3 from './getWeb3';
-import CandidatePage from './CandidatePage';
 import ManagePage from './ManagePage';
 
 class App extends Component {
@@ -36,8 +37,13 @@ class App extends Component {
     }
     return (
       <Router>
-        <div>
-          <Menu mode="horizontal">
+        <div className="nav-container">
+          <Menu mode="horizontal" className="nav">
+            <Menu.Item key="name">
+              <h1 style={{ margin: 0, color: '#1890ff', fontSize: 24 }}>
+                HiredBlock
+              </h1>
+            </Menu.Item>
             <Menu.Item key="search">
               <Link to="/">
                 <Icon type="file-search" />
@@ -51,24 +57,30 @@ class App extends Component {
               </Link>
             </Menu.Item>
           </Menu>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={() => <CandidatePage contract={this.state.contract} />}
-            />
-            <Route
-              path="/manage"
-              render={() => <ManagePage contract={this.state.contract} />}
-            />
-            <Route
-              path="/employees/:id"
-              render={props => (
-                <EmployeePage {...props} contract={this.state.contract} />
-              )}
-            />
-          </Switch>
         </div>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => <CandidatePage contract={this.state.contract} />}
+          />
+          <Route
+            path="/manage"
+            render={() => <ManagePage contract={this.state.contract} />}
+          />
+          <Route
+            path="/employees/:id"
+            render={props => (
+              <EmployeePage {...props} contract={this.state.contract} />
+            )}
+          />
+          <Route
+            path="/review/:id"
+            render={props => (
+              <AddReviewPage {...props} contract={this.state.contract} />
+            )}
+          />
+        </Switch>
       </Router>
     );
   }

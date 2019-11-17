@@ -1,4 +1,4 @@
-import { Avatar, Button, List, PageHeader, Spin } from 'antd';
+import { Avatar, Button, List, PageHeader, Spin, Tag } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
@@ -27,9 +27,7 @@ class ManagePage extends Component {
     return (
       <div>
         <PageHeader
-          className="nav-container"
-          ghost={false}
-          onBack={() => window.history.back()}
+          className="header-container"
           title="Employees Management"
           subTitle="Quarter 1 - 2020"
           extra={[
@@ -53,13 +51,29 @@ class ManagePage extends Component {
                 >
                   View Profile
                 </Link>,
-                <a>Add Review</a>
+                <Link
+                  to={{
+                    pathname: `/review/${item.employeeID}`,
+                    state: { employee: item }
+                  }}
+                >
+                  Add Review
+                </Link>
               ]}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.employeeImage} />}
-                title={item.employeeName}
-                description={item.employeeTitle}
+                title={
+                  <Link
+                    to={{
+                      pathname: `/employees/${item.employeeID}`,
+                      state: { employee: item }
+                    }}
+                  >
+                    {item.employeeName}
+                  </Link>
+                }
+                description={<Tag color="blue">{item.employeeTitle}</Tag>}
               />
             </List.Item>
           )}

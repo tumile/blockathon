@@ -1,5 +1,6 @@
-import { Avatar, List, Spin } from 'antd';
+import { Avatar, List, PageHeader, Spin, Tag } from 'antd';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
 
 class CandidatePage extends Component {
@@ -8,10 +9,10 @@ class CandidatePage extends Component {
   };
 
   async componentDidMount() {
-    const employee = this.props.location.state.employee;
-    const employeeID = this.props.match.params.id;
-    const reviews = await this.props.contract.getPerformanceReviews(employeeID);
-    this.setState({ employee, reviews });
+    const candidates = await this.props.contract.getCandidateList(
+      'e38997ad5c457'
+    );
+    this.setState({ candidates });
   }
 
   render() {
@@ -24,19 +25,39 @@ class CandidatePage extends Component {
       );
     }
     return (
-      <div className="container">
+      <div>
+        <PageHeader className="header-container" title="Applied Candidates" />
         <List
-          itemLayout="vertical"
-          size="large"
-          dataSource={listData}
+          className="container"
+          itemLayout="horizontal"
+          dataSource={candidates}
           renderItem={item => (
-            <List.Item key={item.title}>
+            <List.Item
+              actions={[
+                <Link
+                  to={{
+                    pathname: `/employees/${item.employeeID}`,
+                    state: { isCandidate: true, employee: item }
+                  }}
+                >
+                  View Profile
+                </Link>
+              ]}
+            >
               <List.Item.Meta
                 avatar={<Avatar src={item.employeeImage} />}
-                title={<a href={item.employeeId}>{item.employeeName}</a>}
-                description={item.description}
+                title={
+                  <Link
+                    to={{
+                      pathname: `/employees/${item.employeeID}`,
+                      state: { isCandidate: true, employee: item }
+                    }}
+                  >
+                    {item.employeeName}
+                  </Link>
+                }
+                description={<Tag color="blue">{item.employeeTitle}</Tag>}
               />
-              {item.content}
             </List.Item>
           )}
         />
