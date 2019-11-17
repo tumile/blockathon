@@ -12,6 +12,7 @@ contract HireBlock {
     struct Employee {
         string employeeID;
         string employeeName;
+        string employeeTitle;
         string employeeImage;
     }
 
@@ -41,8 +42,8 @@ contract HireBlock {
         companies[companyID] = newCompany;
     }
 
-    function createEmployee(string memory employeeID, string memory employeeName, string memory employeeImage) public {
-        Employee memory newEmployee = Employee(employeeID, employeeName, employeeImage);
+    function createEmployee(string memory employeeID, string memory employeeName, string memory employeeTitle, string memory employeeImage) public {
+        Employee memory newEmployee = Employee(employeeID, employeeName, employeeTitle, employeeImage);
         employees[employeeID] = newEmployee;
     }
 

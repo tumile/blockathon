@@ -6,7 +6,7 @@ import './App.css';
 import HireBlockContract from './contracts/HireBlock.json';
 import EmployeePage from './EmployeePage';
 import getWeb3 from './getWeb3';
-import LookupPage from './LookupPage';
+import CandidatePage from './CandidatePage';
 import ManagePage from './ManagePage';
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
       const contract = await instance.deployed();
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
-      this.setState({ account, contract });
+      this.setState({ account, contract }, this.init);
     } catch (err) {
       console.error(err);
     }
@@ -41,7 +41,7 @@ class App extends Component {
             <Menu.Item key="search">
               <Link to="/">
                 <Icon type="file-search" />
-                Lookup
+                Candidates
               </Link>
             </Menu.Item>
             <Menu.Item key="manage">
@@ -52,15 +52,21 @@ class App extends Component {
             </Menu.Item>
           </Menu>
           <Switch>
-            <Route exact path="/">
-              <LookupPage contract={this.state.contract} />
-            </Route>
-            <Route path="/manage">
-              <ManagePage contract={this.state.contract} />
-            </Route>
-            <Route path="/employees/:id">
-              <EmployeePage contract={this.state.contract} />
-            </Route>
+            <Route
+              exact
+              path="/"
+              render={() => <CandidatePage contract={this.state.contract} />}
+            />
+            <Route
+              path="/manage"
+              render={() => <ManagePage contract={this.state.contract} />}
+            />
+            <Route
+              path="/employees/:id"
+              render={props => (
+                <EmployeePage {...props} contract={this.state.contract} />
+              )}
+            />
           </Switch>
         </div>
       </Router>
