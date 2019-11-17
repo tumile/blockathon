@@ -4,13 +4,13 @@ pragma experimental ABIEncoderV2;
 contract HireBlock {
 
     struct Company {
-        uint companyID;
+        address companyID;
         string companyName;
         string companyImage;
     }
 
     struct Employee {
-        uint employeeID;
+        address employeeID;
         string employeeName;
         string employeeImage;
     }
@@ -20,12 +20,15 @@ contract HireBlock {
         string review;
     }
 
-    Company[] private companyList;
+    uint nonce = 0;
 
-    mapping(uint => Employee[]) private employeeLists;
+    mapping(address => Company) private companies;
 
-    //concatenate companyId and employeeID to get the key for performance reviews
-    mapping(string => PerformanceReview[]) private employeeReviewsForCompany;
+    mapping(address => Employee[]) private companyEmployees;
+
+    mapping(address => Employee[]) private companyCandidates;
+
+    mapping(address => PerformanceReview[]) private employeeReviews;
 
     address private owner;
 
@@ -33,16 +36,17 @@ contract HireBlock {
         owner = msg.sender;
     }
 
-    function addCompany(string memory companyName, string memory companyImage) public returns(uint companyID) {
+    function addCompany(string memory companyName, string memory companyImage) public returns (address) {
         require(msg.sender == owner, "Sender must be owner of contract");
 
-        Company memory newCompany = Company(companyList.length, companyName, companyImage);
-        companyList.push(newCompany);
+        address companyID = getUniqueId();
+        Company memory newCompany = Company(companyID, companyName, companyImage);
+        companies[companyID] = newCompany;
 
-        return companyList.length - 1;
+        return companyID;
     }
 
-    function addEmployee(uint companyID, string memory employeeName, string memory employeeImage) public returns (uint employeeID) {
+    function addEmployee(address companyID, string memory employeeName, string memory employeeImage) public returns (address) {
         require(companyID < companyList.length, "Company ID is invalid");
 
         uint employeeAmount = employeeLists[companyID].length;
@@ -63,6 +67,12 @@ contract HireBlock {
         string memory compEmpID = strConcat(uintToString(companyID), "-", uintToString(employeeID));
 
         employeeReviewsForCompany[compEmpID].push(newReview);
+    }
+
+    function addCandidate(uint companyID, uint employeeID, string memory employeeName, string memory employeeImage) public {
+        Employee memory newEmployee = Employee(employeeID, employeeName, employeeImage);
+        
+        companyCandidates[companyID].push(newEmployee);
     }
 
     function getEmployeeList(uint companyID) public view returns(Employee[] memory employeeList) {
@@ -127,5 +137,11 @@ contract HireBlock {
             s[j] = reversed[i - j];
         }
         str = string(s);
+    }
+
+    function getUniqueId() internal returns (address) {
+        address random = address(uint160(uint(keccak256(abi.encodePacked(nonce, blockhash(block.number))))));
+        nonce++;
+        return address(random);
     }
 }
