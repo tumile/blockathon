@@ -35,15 +35,18 @@ contract HireBlock {
         owner = msg.sender;
     }
 
-    function addCompany(string memory companyID, string memory companyName, string memory companyImage) public {
+    function createCompany(string memory companyID, string memory companyName, string memory companyImage) public {
         require(msg.sender == owner, "Sender must be owner of contract");
         Company memory newCompany = Company(companyID, companyName, companyImage);
         companies[companyID] = newCompany;
     }
 
-    function addEmployee(string memory companyID, string memory employeeID, string memory employeeName, string memory employeeImage) public {
+    function createEmployee(string memory employeeID, string memory employeeName, string memory employeeImage) public {
         Employee memory newEmployee = Employee(employeeID, employeeName, employeeImage);
         employees[employeeID] = newEmployee;
+    }
+
+    function addEmployee(string memory companyID, string memory employeeID) public {
         companyEmployees[companyID].push(employeeID);
     }
 
