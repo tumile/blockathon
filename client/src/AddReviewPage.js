@@ -17,7 +17,7 @@ class AddReviewPage extends Component {
   addPerformanceReview = async () => {
     //fix this
     console.log(this.state.date);
-    this.props.contract.addPerformanceReview('e38997ad5c457', this.state.employee[0], review, Date.UTC(2019, 11), {from: this.props.account});
+    this.props.contract.addPerformanceReview('e38997ad5c457', this.state.employee[0], this.state.review, Date.UTC(2019, 11), {from: this.props.account});
   }
 
   handleDateChange = (e) => {
