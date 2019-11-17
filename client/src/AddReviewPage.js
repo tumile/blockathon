@@ -14,6 +14,20 @@ class AddReviewPage extends Component {
     this.setState({ employee });
   }
 
+  addPerformanceReview = async () => {
+    //fix this
+    console.log(this.state.date);
+    this.props.contract.addPerformanceReview('e38997ad5c457', this.state.employee[0], review, Date.UTC(2019, 11), {from: this.props.account});
+  }
+
+  handleDateChange = (e) => {
+    this.setState({time: e.target.value});
+  }
+
+  handleReviewChange = (e) => {
+    this.setState({review: e.target.value});
+  }
+
   render() {
     const { employee } = this.state;
     if (!employee) {
@@ -35,11 +49,11 @@ class AddReviewPage extends Component {
           <Form.Item label="Time">
             <MonthPicker />
           </Form.Item>
-          <Form.Item label="Review">
+          <Form.Item label="Review" value={this.state.review} onChange={this.handleReviewChange}>
             <Input.TextArea rows={6} />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Submit</Button>
+            <Button type="primary" onClick={this.addPerformanceReview}>Submit</Button>
           </Form.Item>
         </Form>
       </div>
