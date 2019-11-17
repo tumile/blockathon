@@ -16,13 +16,15 @@ class AddReviewPage extends Component {
   addPerformanceReview = async e => {
     e.preventDefault();
     const { employee, date, review } = this.state;
-    this.props.contract.addPerformanceReview(
-      'e38997ad5c457',
-      employee[0],
-      review,
-      Date.UTC(date.years, date.months, date.date),
-      { from: this.props.account }
-    );
+    this.props.contract
+      .addPerformanceReview(
+        'e38997ad5c457',
+        employee[0],
+        review,
+        Date.UTC(date.years, date.months, date.date),
+        { from: this.props.account }
+      )
+      .then(() => window.history.back());
   };
 
   handleDateChange = e => {
