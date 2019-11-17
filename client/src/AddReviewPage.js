@@ -20,16 +20,30 @@ class AddReviewPage extends Component {
     this.props.contract
       .addPerformanceReview(
         'e38997ad5c457',
-        employee.employeeID,
+        employee[0],
         review,
-        timestamp,
-        { from: this.props.account }
+        Date.UTC(2019, 11),
+        {
+          from: this.props.account
+        }
       )
       .then(() => {
         window.history.back();
         console.log('heyyyy');
       });
   };
+
+  // addPerformanceReview = async () => {
+  //   //fix this
+  //   console.log(this.state.date);
+  //   this.props.contract.addPerformanceReview(
+  //     'e38997ad5c457',
+  //     this.state.employee[0],
+  //     review,
+  //     Date.UTC(2019, 11),
+  //     { from: this.props.account }
+  //   );
+  // };
 
   render() {
     const { employee } = this.state;
@@ -56,11 +70,12 @@ class AddReviewPage extends Component {
               }
             />
           </Form.Item>
-          <Form.Item label="Review">
-            <Input.TextArea
-              rows={6}
-              onChange={e => this.setState({ review: e.target.value })}
-            />
+          <Form.Item
+            label="Review"
+            value={this.state.review}
+            onChange={e => this.setState({ review: e.target.value })}
+          >
+            <Input.TextArea rows={6} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
