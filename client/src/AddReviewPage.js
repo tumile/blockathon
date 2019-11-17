@@ -4,15 +4,32 @@ import React, { Component } from 'react';
 const { MonthPicker } = DatePicker;
 class AddReviewPage extends Component {
   state = {
-    employee: null
+    employee: null,
+    timestamp: null,
+    review: null
   };
 
   componentDidMount() {
     const { employee } = this.props.location.state;
-    console.log(this.props.location.state);
-
     this.setState({ employee });
   }
+
+  onSubmit = e => {
+    e.preventDefault();
+    const { employee, timestamp, review } = this.state;
+    this.props.contract
+      .addPerformanceReview(
+        'e38997ad5c457',
+        employee.employeeID,
+        review,
+        timestamp,
+        { from: this.props.account }
+      )
+      .then(() => {
+        window.history.back();
+        console.log('heyyyy');
+      });
+  };
 
   render() {
     const { employee } = this.state;
@@ -31,15 +48,24 @@ class AddReviewPage extends Component {
           title="Add Review"
           subTitle={`Add performance review for ${employee.employeeName}`}
         />
-        <Form className="container">
+        <Form className="container" onSubmit={this.onSubmit}>
           <Form.Item label="Time">
-            <MonthPicker />
+            <DatePicker
+              onChange={date =>
+                this.setState({ timestamp: date.utc(date).valueOf() })
+              }
+            />
           </Form.Item>
           <Form.Item label="Review">
-            <Input.TextArea rows={6} />
+            <Input.TextArea
+              rows={6}
+              onChange={e => this.setState({ review: e.target.value })}
+            />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Submit</Button>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </div>

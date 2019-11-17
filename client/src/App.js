@@ -77,7 +77,11 @@ class App extends Component {
           <Route
             path="/review/:id"
             render={props => (
-              <AddReviewPage {...props} contract={this.state.contract} />
+              <AddReviewPage
+                {...props}
+                contract={this.state.contract}
+                account={this.state.account}
+              />
             )}
           />
         </Switch>
