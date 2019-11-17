@@ -1,11 +1,10 @@
 import { Button, DatePicker, Form, Input, PageHeader, Spin } from 'antd';
 import React, { Component } from 'react';
 
-const { MonthPicker } = DatePicker;
 class AddReviewPage extends Component {
   state = {
     employee: null,
-    timestamp: null,
+    date: null,
     review: null
   };
 
@@ -14,36 +13,21 @@ class AddReviewPage extends Component {
     this.setState({ employee });
   }
 
-  onSubmit = e => {
+  addPerformanceReview = async e => {
     e.preventDefault();
-    const { employee, timestamp, review } = this.state;
-    this.props.contract
-      .addPerformanceReview(
-        'e38997ad5c457',
-        employee[0],
-        review,
-        Date.UTC(2019, 11),
-        {
-          from: this.props.account
-        }
-      )
-      .then(() => {
-        window.history.back();
-        console.log('heyyyy');
-      });
+    const { employee, date, review } = this.state;
+    this.props.contract.addPerformanceReview(
+      'e38997ad5c457',
+      employee[0],
+      review,
+      Date.UTC(date.years, date.months, date.date),
+      { from: this.props.account }
+    );
   };
 
-  // addPerformanceReview = async () => {
-  //   //fix this
-  //   console.log(this.state.date);
-  //   this.props.contract.addPerformanceReview(
-  //     'e38997ad5c457',
-  //     this.state.employee[0],
-  //     review,
-  //     Date.UTC(2019, 11),
-  //     { from: this.props.account }
-  //   );
-  // };
+  handleDateChange = e => {
+    this.setState({ time: e.target.value });
+  };
 
   render() {
     const { employee } = this.state;
@@ -62,12 +46,10 @@ class AddReviewPage extends Component {
           title="Add Review"
           subTitle={`Add performance review for ${employee.employeeName}`}
         />
-        <Form className="container" onSubmit={this.onSubmit}>
+        <Form className="container" onSubmit={this.addPerformanceReview}>
           <Form.Item label="Time">
             <DatePicker
-              onChange={date =>
-                this.setState({ timestamp: date.utc(date).valueOf() })
-              }
+              onChange={date => this.setState({ date: date.toObject() })}
             />
           </Form.Item>
           <Form.Item
