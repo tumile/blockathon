@@ -20,6 +20,13 @@ class App extends Component {
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
       this.setState({ account, contract }, this.init);
+
+
+      var employees = await contract.getEmployeeList('e38997ad5c457');
+      console.log(employees);
+      console.log(employees[1][0]);
+      console.log(await contract.getPerformanceReviews(employees[1][0]));
+
     } catch (err) {
       console.error(err);
     }
