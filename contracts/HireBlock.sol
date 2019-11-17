@@ -4,32 +4,30 @@ pragma experimental ABIEncoderV2;
 contract HireBlock {
 
     struct Company {
-        address companyID;
+        string companyID;
         string companyName;
         string companyImage;
     }
 
     struct Employee {
-        address employeeID;
+        string employeeID;
         string employeeName;
         string employeeImage;
     }
 
     struct PerformanceReview {
-        address companyID;
+        string companyID;
         uint timestamp;
         string review;
     }
 
-    uint nonce = 0;
+    mapping(string => Company) private companies;
+    mapping(string => Employee) private employees;
 
-    mapping(address => Company) private companies;
-    mapping(address => Employee) private employees;
+    mapping(string => string[]) private companyEmployees;
+    mapping(string => string[]) private companyCandidates;
 
-    mapping(address => address[]) private companyEmployees;
-    mapping(address => address[]) private companyCandidates;
-
-    mapping(address => PerformanceReview[]) private employeeReviews;
+    mapping(string => PerformanceReview[]) private employeeReviews;
 
     address private owner;
 
@@ -37,26 +35,24 @@ contract HireBlock {
         owner = msg.sender;
     }
 
-    function addCompany(string memory companyName, string memory companyImage) public returns (address companyID) {
+    function addCompany(string memory companyID, string memory companyName, string memory companyImage) public {
         require(msg.sender == owner, "Sender must be owner of contract");
-        companyID = getUniqueId();
         Company memory newCompany = Company(companyID, companyName, companyImage);
         companies[companyID] = newCompany;
     }
 
-    function addEmployee(address companyID, string memory employeeName, string memory employeeImage) public returns (address employeeID) {
-        employeeID = getUniqueId();
+    function addEmployee(string memory companyID, string memory employeeID, string memory employeeName, string memory employeeImage) public {
         Employee memory newEmployee = Employee(employeeID, employeeName, employeeImage);
         employees[employeeID] = newEmployee;
         companyEmployees[companyID].push(employeeID);
     }
 
-    function addCandidate(address companyID, address employeeID) public {
+    function addCandidate(string memory companyID, string memory employeeID) public {
         companyCandidates[companyID].push(employeeID);
     }
 
-    function getEmployeeList(address companyID) public view returns (Employee[] memory employeeList) {
-        address[] memory addresses = companyEmployees[companyID];
+    function getEmployeeList(string memory companyID) public view returns (Employee[] memory employeeList) {
+        string[] memory addresses = companyEmployees[companyID];
         uint length = addresses.length;
         employeeList = new Employee[](length);
         for (uint i = 0; i < length; i++) {
@@ -64,8 +60,8 @@ contract HireBlock {
         }
     }
 
-    function getCandidateList(address companyID) public view returns (Employee[] memory employeeList) {
-        address[] memory addresses = companyCandidates[companyID];
+    function getCandidateList(string memory companyID) public view returns (Employee[] memory employeeList) {
+        string[] memory addresses = companyCandidates[companyID];
         uint length = addresses.length;
         employeeList = new Employee[](length);
         for (uint i = 0; i < length; i++) {
@@ -73,21 +69,16 @@ contract HireBlock {
         }
     }
 
-    function addPerformanceReview(address companyID, address employeeID, string memory review, uint timestamp) public {
+    function addPerformanceReview(string memory companyID, string memory employeeID, string memory review, uint timestamp) public {
         PerformanceReview memory newReview = PerformanceReview(companyID, timestamp, review);
         employeeReviews[employeeID].push(newReview);
     }
 
-    function getPerformanceReviews(address employeeID) public view returns (PerformanceReview[] memory performanceReviews) {
+    function getPerformanceReviews(string memory employeeID) public view returns (PerformanceReview[] memory performanceReviews) {
         performanceReviews = employeeReviews[employeeID];
     }
 
-    function getCompany(address companyID) public view returns(Company memory company) {
+    function getCompany(string memory companyID) public view returns(Company memory company) {
         company = companies[companyID];
-    }
-
-    function getUniqueId() internal returns (address random) {
-        random = address(uint160(uint(keccak256(abi.encodePacked(nonce, blockhash(block.number))))));
-        nonce++;
     }
 }

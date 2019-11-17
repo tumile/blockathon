@@ -19,10 +19,7 @@ class App extends Component {
       const contract = await instance.deployed();
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
-      this.setState({ account, contract });
-
-      console.log(contract.getPerformanceReviews(0, 0));
-
+      this.setState({ account, contract }, this.init);
     } catch (err) {
       console.error(err);
     }

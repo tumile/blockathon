@@ -2,59 +2,63 @@ var HireBlock = artifacts.require('./HireBlock.sol');
 
 module.exports = function(deployer) {
   deployer.deploy(HireBlock).then(async function(instance) {
-    const google = await instance.addCompany(
+    // Company
+    const googleID = 'e38997ad5c457';
+    await instance.addCompany(
+      googleID,
       'Google',
       'https://images.theconversation.com/files/93616/original/image-20150902-6700-t2axrz.jpg'
     );
-    const micro = await instance.addCompany(
-      'Microsoft',
-      'https://cdn.pixabay.com/photo/2013/02/12/09/07/microsoft-80660_960_720.png'
-    );
-    const john = await instance.addEmployee(
-      google,
+
+    // Employee
+    const johnID = Math.random()
+      .toString(16)
+      .slice(2);
+    await instance.addEmployee(
+      googleID,
+      johnID,
       'John Doe',
       'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
     );
-    const alice = await instance.addEmployee(
-      micro,
+    const aliceID = Math.random()
+      .toString(16)
+      .slice(2);
+    await instance.addEmployee(
+      microID,
+      aliceID,
       'Alice Smith',
       'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
     );
-    const dana = await instance.addEmployee(
-      google,
-      'Dana Washington',
-      'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
-    );
-    const bob = await instance.addEmployee(
-      micro,
-      'Bob Jones',
-      'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
-    );
-    const james = await instance.addEmployee(
-      micro,
-      'James Lincoln',
-      'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
-    );
+
     instance.addPerformanceReview(
-      google,
-      john,
+      googleID,
+      johnID,
       'Good job this year',
       Date.UTC(2017, 12, 28)
     );
     instance.addPerformanceReview(
-      google,
-      dana,
+      googleID,
+      aliceID,
       'Another good year',
       Date.UTC(2018, 12, 28)
     );
-    instance.addPerformanceReview(
-      micro,
-      james,
-      'Excellent performance',
-      Date.UTC(2017, 12, 26)
+
+    const microID = Math.random()
+      .toString(16)
+      .slice(2);
+    await instance.addCompany(
+      microID,
+      'Microsoft',
+      'https://images.theconversation.com/files/93616/original/image-20150902-6700-t2axrz.jpg'
     );
-    instance.addCandidate(google, alice);
-    instance.addCandidate(google, james);
-    instance.addCandidate(google, bob);
+    await instance.addEmployee(
+      microID,
+      aliceID,
+      'Alice Smith',
+      'https://cdn2.iconfinder.com/data/icons/people-80/96/Picture1-512.png'
+    );
+
+    instance.addCandidate(googleID, aliceID);
+    instance.addCandidate(googleID, johnID);
   });
 };
